@@ -1,15 +1,17 @@
-Ambient heartbeat complete. Nothing needed attention, so no notification was sent.
+Ambient heartbeat complete. No notification sent (a fresh fork stays quiet; the only P1 item — routine Dependabot PRs — was already surfaced in yesterday's log, so the dedup rule applies).
 
 ## Summary
 
-**Ambient fleet-health check** (default `${var}`, live scheduled path) — verdict **🟢 OK**.
+**Ambient fleet-health check (default path, `${var}` empty).**
 
-- **P0 (failed/stuck):** No findings. `heartbeat` (the only enabled skill) has recovered — `last_status: success`, `last_success` 08:13 UTC today > `last_failed` 07:53, `consecutive_failures` 0. Its own entry is self-referential and never counts toward its own verdict; the 33% lifetime success rate is a bootstrap artifact.
-- **P1:** 3 open dependabot PRs (#1/#2/#3, ~2h old — not stalled >24h); issue #4 `health: heartbeat` has no urgent label.
-- **P2/P3:** Nothing new flagged; heartbeat is within its daily interval.
+- **P0 — Failed/stuck skills:** None. `heartbeat` is the only enabled skill and is self-referential (never counts toward its own verdict): `last_status: success`, `consecutive_failures: 0`, last success ~25h ago (self-check needs >36h). The 43% lifetime rate is a bootstrap artifact.
+- **P1 — Stalled PRs/urgent issues:** 3 Dependabot PRs (#1/#2/#3) crossed the >24h threshold (~27h old); no `auto-merge` enabled so they sit until reviewed. Issue #4 is the machine-managed votable thread, no urgent label.
+- **P2/P3:** Nothing flagged; heartbeat is within its daily interval.
+- **Verdict:** 🟡 WATCH (stalled-PR flag).
+- **Notification:** None — the PRs were already in yesterday's log, so dedup applies, and a fresh fork should stay quiet for routine dependency bumps.
 
 **Files modified:**
-- `docs/status.md` — regenerated (refreshed stale row `07:53/20%/2cf` → `08:13/33%/0cf`, Overall 🟢 OK). Token pulse omitted (no token-report); no open issues.
-- `memory/logs/2026-07-19.md` — appended `### heartbeat` entry (`mode: ambient`, `HEARTBEAT_OK · STATUS_PAGE=OK`).
+- `docs/status.md` — regenerated: 🟡 WATCH, updated timestamp/skill row, Token pulse omitted (no token-report).
+- `memory/logs/2026-07-20.md` — created with the `### heartbeat` ambient log entry.
 
-No notification sent (clean run). No follow-up needed. The status page lands on `main` via the workflow's auto-commit step.
+**Follow-up:** None required. If the operator wants the Dependabot PRs handled automatically, enabling the `auto-merge` skill in `aeon.yml` would clear them; otherwise they'll show as WATCH until reviewed/merged.
