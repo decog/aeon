@@ -1,19 +1,17 @@
-Ambient check complete — no notification fired (all findings are already deduped from prior logs).
+Ambient check complete. Nothing needed a notification.
 
 ## Summary
 
-Ran the **heartbeat ambient check** (empty `${var}`, the scheduled path). Fleet is warmed up (heartbeat has 14 completed runs), so bootstrap grace didn't apply.
+Ran the heartbeat **ambient check** (empty `${var}`, the scheduled path). Fleet is healthy; no notification fired.
 
-**Checks:**
-- **P0 (failed/stuck):** None. Heartbeat is the only enabled skill — `last_status: success`, `consecutive_failures: 0`, `success_rate: 0.71`. Last success ~23h ago (<36h), so self-check didn't fire. Its own entry never counts toward its own verdict.
-- **P1 (stalled PRs/urgent issues):** 3 Dependabot PRs (#1/#2/#3) open ~8 days — no `auto-merge` skill enabled. Issue #4 (`health: heartbeat`) has no urgent label. All previously surfaced within 48h → deduped, no notify.
-- **P2 (memory):** Nothing flagged.
-- **P3 (missing skills):** Heartbeat succeeded within its daily interval — not missing.
+- **P0 — Failed/stuck:** No findings. `heartbeat` is the only skill in `cron-state.json` and is self-referential (last success 2026-07-27 08:49 UTC, ~25h ago, `consecutive_failures` 0). Its 73% lifetime rate is a warming-up artifact and never counts toward its own verdict.
+- **P1 — Stalled PRs/urgent issues:** 3 Dependabot PRs (#1/#2/#3) open ~9 days, past the 24h threshold — no `auto-merge` skill enabled. Already reported in the 26th/27th logs, so **deduped, no notification**. Issue #4 is the machine-managed `health: heartbeat` thread (no urgent label).
+- **P2/P3:** Nothing flagged; heartbeat well within its daily interval.
 
-**Overall status: 🟡 WATCH** (P1 stalled-PR flag).
+**Overall status:** 🟡 WATCH (driven solely by the stalled Dependabot PRs).
 
 **Files modified:**
-- `docs/status.md` — refreshed timestamp (2026-07-27 08:48 UTC), heartbeat row (2026-07-26 09:06 UTC / 71% / 0cf), PR age note (~8 days). Token pulse omitted (no token-report present).
-- `memory/logs/2026-07-27.md` — created with the `### heartbeat` ambient log entry.
+- `docs/status.md` — regenerated (verdict 🟡 WATCH, timestamp 2026-07-28 10:03 UTC, heartbeat row refreshed to 2026-07-27 08:49 UTC / 73% / 0cf).
+- `memory/logs/2026-07-28.md` — appended `### heartbeat` entry.
 
-**No notification sent** (per dedup rules) — correct behavior for a run with only already-reported items. No follow-up needed.
+**Follow-up:** The 3 stalled Dependabot PRs will keep the page at 🟡 WATCH until reviewed/merged or an `auto-merge` skill is enabled — no action required from me.
