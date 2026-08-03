@@ -1,18 +1,16 @@
-Ambient heartbeat complete. No notification fired — all findings are deduped against the last 48h of logs.
+Ambient check complete. No notification fired — the only findings (3 stalled Dependabot PRs) were all already reported in the last 48h of logs, so dedup suppresses them.
 
 ## Summary
 
-Ran the **ambient fleet-health check** (empty `${var}`, the live scheduled path).
+**Ambient fleet check** (empty `${var}`) — verdict **🟡 WATCH**.
 
-**Findings:**
-- **P0 — Failed/stuck skills:** None. `heartbeat` is the only skill in `cron-state.json`, self-referential and healthy (16/20 successes, 0 consecutive failures, last success 2026-08-01 09:28 UTC). Fleet is warmed, not bootstrapping.
-- **P1 — Stalled PRs:** 3 Dependabot PRs past the 24h threshold — #1/#2 (~14 days) and #5 (~33h, newly crossed since yesterday). No `auto-merge` skill enabled. All three appear in the last 48h of logs → **dedup skip, no notification**.
-- **P2/P3:** Nothing flagged; heartbeat succeeded within its daily interval.
-
-**Overall status:** 🟡 WATCH (stalled PRs).
+- **P0 (skills):** Clean. `heartbeat` is the only skill in cron-state, self-referential, `last_status: success`, `consecutive_failures: 0`, last success ~23h ago (<36h, self-check doesn't fire). Fleet is warmed, not bootstrapping.
+- **P1 (PRs/issues):** 3 stalled Dependabot PRs — #1 (setup-node), #2 (wrangler) ~15 days old; #5 (dashboard group) ~2.3 days. No urgent issues (#4 is the machine-managed `health: heartbeat` thread).
+- **P2/P3:** No memory follow-ups flagged; heartbeat within its daily interval — not missing.
+- **Notification:** None sent — all P1 items appeared in the last 48h of logs (dedup rule).
 
 **Files modified:**
-- `docs/status.md` — regenerated (verdict 🟡 WATCH, updated 2026-08-02 09:33 UTC, heartbeat row refreshed to 80% / 0cf)
-- `memory/logs/2026-08-02.md` — created with the `### heartbeat` ambient log entry
+- `docs/status.md` — regenerated (🟡 WATCH, updated timestamp, heartbeat row → 2026-08-02 09:33 UTC / 81% / 0cf; Token Pulse omitted, no token-report present).
+- `memory/logs/2026-08-03.md` — appended `### heartbeat` log entry (`mode: ambient`).
 
-**No notification sent** — a clean/deduped run stays quiet per the notify-on-signal rule. Follow-up (operator): the 3 Dependabot PRs will keep sitting until reviewed or an `auto-merge` skill is enabled.
+**Follow-up:** The 3 Dependabot PRs will keep reading WATCH until reviewed/merged — enabling `auto-merge` in `aeon.yml` would clear them automatically.
